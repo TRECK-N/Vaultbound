@@ -1,0 +1,696 @@
+# VAULTBOUND — Major Game Upgrade: World Design, Controls, Character Customization, Lobbies & Economy
+
+I want you to significantly improve my existing VAULTBOUND game project. This is a major quality upgrade, not a request to start over or create a completely different game.
+
+The current version feels too basic, box-like, and unfinished. The world does not feel like a real place, the character customization is too limited, the controls have problems, and the overall economy and interface lack polish.
+
+Your objective is to make VAULTBOUND feel like a premium, modern 3D social game with a recognizable identity, an explorable shared-style hub, customizable player homes, a polished lobby system, and a coherent virtual economy.
+
+**Do not only explain what you would change. Inspect the existing project and implement the improvements directly in its code.** Preserve existing working features whenever possible, and do not remove the inventory, marketplace, auctions, Vault Duel, Vault Coins, player progression, or other functionality without a compelling technical reason.
+
+---
+
+## 1. FIX THE MOVEMENT CONTROLS AND ADD FULL KEYBIND CUSTOMIZATION
+
+This is one of the highest-priority fixes.
+
+### Current problem
+When I press A or D to move left or right, the game sometimes opens Auctions or Vault Duel instead. This makes movement frustrating and unreliable.
+
+### Required behavior
+
+Completely audit the existing keyboard input system and fix conflicts between movement controls, interface shortcuts, and gameplay actions.
+
+Default controls should be:
+
+- W: Move forward.
+- A: Move left.
+- S: Move backward.
+- D: Move right.
+- Shift: Sprint, where supported.
+- Space: Jump, if jumping is implemented.
+- E: Interact with nearby buildings, doors, objects, and other interactive elements.
+- Escape: Close the current menu or return to the previous screen.
+- Mouse: Rotate the camera or interact with the interface, depending on context.
+
+Use the existing camera and movement system if they are already functional, but make movement smooth and predictable.
+
+### Critical keyboard handling rules
+
+- A and D must never accidentally open the Auctions or Vault Duel screens.
+- Movement keys must only control the character while the player is actively playing in the world.
+- When a text field, chat input, search box, or keybinding editor is focused, gameplay shortcuts must not interfere with typing.
+- Do not trigger gameplay actions when the player is interacting with menus.
+- Prevent the same key from triggering multiple actions simultaneously.
+- Handle keydown and keyup events correctly so the character does not keep moving after the user releases a key.
+- Avoid duplicate keyboard listeners when changing screens.
+- Support WASD and arrow keys where appropriate.
+- Make sure the controls work reliably after entering and exiting buildings, menus, the base, and mini-games.
+
+### Add a real Controls section in Settings
+
+Create a polished Settings screen accessible from the main menu and pause menu.
+
+It should contain a Controls tab with a list of actions and their assigned keys.
+
+For example:
+
+| Action | Default key |
+|---|---|
+| Move forward | W |
+| Move backward | S |
+| Move left | A |
+| Move right | D |
+| Interact | E |
+| Sprint | Shift |
+| Jump | Space |
+| Open inventory | I |
+| Open map | M |
+| Pause / close menu | Escape |
+
+Each binding must have a **Rebind** button.
+
+When the player clicks Rebind, display a message such as “Press any key to assign this action.” Capture the next valid key and assign it to that action.
+
+Also implement:
+
+- Detection of conflicting key assignments.
+- A clear warning if a selected key is already assigned.
+- An option to replace the conflicting binding or cancel.
+- A Restore Defaults button.
+- Saving custom bindings so they remain available after refreshing the game.
+- Support for sensible keyboard layouts and special keys.
+- Clear visual feedback when the game is waiting for a key.
+
+Do not allow Escape or another essential cancellation key to become impossible to use.
+
+Make the controls system configurable through one central input mapping rather than scattered hardcoded key checks throughout the code.
+
+---
+
+## 2. REBUILD THE GAME FLOW: ADD A REAL HOMESCREEN BEFORE ENTERING THE WORLD
+
+Currently, the player spawns directly into a map containing NPCs. This should change.
+
+The game should begin with a polished, immersive home screen. Players should choose how they want to play before entering the actual 3D world.
+
+The first screen should feel like the main menu of a premium multiplayer game, rather than a simple website dashboard.
+
+### Visual direction
+
+Create a cinematic menu featuring:
+
+- A dark charcoal and midnight-blue background.
+- Sophisticated gold accents used sparingly.
+- High-quality typography.
+- Subtle animated lighting, atmospheric particles, and layered backgrounds.
+- A small animated preview of the VAULTBOUND city or a customizable avatar.
+- Smooth transitions between screens.
+- A clear VAULTBOUND logo and consistent visual identity.
+
+Avoid excessive gradients, random colors, generic cards, oversized empty boxes, and the appearance of a beginner project.
+
+### Main menu options
+
+Display these main choices:
+
+**PLAY SOLO**
+- Enter a private world alone.
+- Explore the city.
+- Enter and customize your personal base.
+- Visit the market and participate in supported game activities.
+- Play available mini-games.
+- Save progress locally when using offline mode.
+
+**PLAY WITH FRIENDS**
+- Join an existing lobby using an invitation or lobby code.
+- Create a lobby for friends.
+- Invite friends when social and multiplayer services are configured.
+- Display lobby members, player names, and ready status when supported.
+
+**PUBLIC LOBBIES**
+- Browse available public lobbies.
+- Display lobby name, current player count, maximum capacity, and privacy status.
+- Allow the user to join a compatible lobby.
+- Include filters for lobby size and other useful settings.
+- Include a Quick Join option that selects a suitable public lobby.
+
+**CREATE LOBBY**
+When creating a lobby, allow the player to set:
+- Lobby name.
+- Public or private visibility.
+- Maximum player count.
+- Optional password or invitation code for private lobbies.
+- Optional gameplay settings where supported.
+
+Display a lobby waiting room with its member list and a Start or Enter World button, depending on the game mode.
+
+**CHARACTER**
+- Open character customization.
+
+**SETTINGS**
+- Controls, graphics, audio, accessibility, and other available options.
+
+**EXIT / BACK**
+- Navigate appropriately depending on the platform.
+
+Do not force the player to enter a world just to access basic settings or customize their character.
+
+### Important multiplayer implementation rule
+
+The lobby interface must not simply pretend that real multiplayer works.
+
+Inspect the current architecture. If real multiplayer infrastructure is available, integrate the lobby flow with it properly. If it is not available, implement a complete playable local prototype of the lobby interface and structure the code so a real backend can be connected later.
+
+For actual online lobbies and synchronized players, use an appropriate backend such as Firebase or another suitable real-time service only when it is configured and supported by the project.
+
+Do not claim that players are connected to the internet, friends have been invited, or public lobbies exist when these actions are only simulated locally.
+
+Clearly distinguish Demo / Offline Mode from Online Multiplayer whenever necessary. Never expose secret API keys or private credentials in client-side code.
+
+---
+
+## 3. CREATE A REAL 3D HUB WORLD INSTEAD OF A BOX OR SIMPLE ARENA
+
+This is one of the biggest visual changes.
+
+The current environment feels like a small box surrounded by basic market elements. I want a coherent, explorable 3D-style map that feels like a small but believable social game world.
+
+The map does not need to be huge. It needs to be well designed, attractive, spacious enough to explore, and filled with distinct locations.
+
+### General world concept
+
+Create a compact urban neighborhood called **VAULTBOUND DISTRICT**.
+
+Use a stylized but premium 3D art direction, with believable proportions, good lighting, detailed architecture, atmospheric depth, and a consistent material palette.
+
+The map should have:
+
+- A central plaza.
+- Clearly defined streets and pedestrian paths.
+- A marketplace district.
+- An auction house.
+- A visible row or neighborhood of player homes.
+- A central meeting area.
+- Decorative landscaping, trees, streetlights, benches, signs, and other environmental details.
+- Distinct landmarks that make the map recognizable.
+- Multiple routes that connect locations naturally.
+- Enough open space for players to walk around and see the surrounding environment.
+
+Use a slightly elevated third-person camera if that fits the existing engine, but do not make the environment look flat or like a collection of disconnected boxes.
+
+Add a proper ground plane, visible depth, coherent lighting, shadows where supported, and meaningful foreground and background elements.
+
+### Map layout
+
+Organize the map into understandable zones:
+
+**A. Central Plaza**
+
+A central meeting point with a recognizable VAULTBOUND sign or landmark. It should feel like the heart of the district.
+
+**B. Marketplace**
+
+A visually distinctive market building or shopping street where the player can browse items, purchase cosmetics, and list available inventory items.
+
+**C. Auction House**
+
+A separate architectural landmark with its own entrance and visual identity. It should not simply be a button floating in the world.
+
+**D. Player Residential District**
+
+Create a neighborhood containing approximately 10–20 visible house plots or base locations.
+
+These homes should look like actual small buildings or individually designed residences, not simple cubes or flat rectangles.
+
+Use some visual variation across homes:
+- Different façades.
+- Different roof shapes.
+- Different front doors.
+- Windows and exterior materials.
+- Small front gardens, paths, lights, or decorative items.
+
+The homes should share a consistent design language while still being easy to distinguish.
+
+**E. Social / Activities Zone**
+
+Provide an area for NPC interactions, mini-games, public activities, and future social features.
+
+Ensure that NPCs do not block the entire spawn area or make the environment feel overcrowded.
+
+### Navigation and interaction
+
+The player should be able to walk naturally between these areas.
+
+- Use clear paths and readable building entrances.
+- Show the building name when the player approaches it.
+- Display an interaction prompt such as “Press E to Enter Marketplace.”
+- Allow entering a building through the entrance or through an appropriate world interaction.
+- Use camera transitions or fade effects where useful.
+- Provide map markers or a small minimap if practical.
+- Prevent players from walking through major buildings or getting stuck in walls.
+- Ensure the player spawns at a sensible location.
+
+If the project uses a 2D canvas to simulate 3D, improve it as much as possible without creating fake 3D claims. If a genuine 3D engine is already used, make full use of its existing capabilities. Avoid replacing the entire rendering engine unless necessary.
+
+Prioritize a coherent, finished world over a massive but empty map.
+
+---
+
+## 4. MAKE PLAYER BASES REAL PLACES THAT THE PLAYER CAN ENTER AND CUSTOMIZE
+
+At the moment, the concept of a personal base is not visually convincing enough.
+
+Every player should have a clearly designated personal home in the residential district.
+
+### Outside the base
+
+The player's own house should be visibly marked, for example with a subtle personalized nameplate or ownership indicator.
+
+Other houses can represent other players, future residents, or demo homes.
+
+When a player approaches their own house, display:
+
+“YOUR BASE — Press E to Enter”
+
+The player must be able to walk to the actual house, interact with its entrance, and transition inside.
+
+### Inside the base
+
+Create a properly furnished interior rather than another empty box.
+
+The interior should include:
+- An entrance or foyer.
+- A main living area.
+- Furniture with believable proportions.
+- A place to display collectibles and rare items.
+- Storage or an inventory interaction point where appropriate.
+- Decorative lighting.
+- Windows or other visual elements that help the space feel like a home.
+
+The home should feel personal and connected to the player's progress.
+
+### Base customization
+
+Allow the player to customize the interior through a dedicated Build or Decorate mode.
+
+Include categories such as:
+- Furniture.
+- Lighting.
+- Wall decorations.
+- Rugs.
+- Plants.
+- Collectible displays.
+- Technology and entertainment.
+- Special or rare decorative items.
+
+For the prototype, implement several actual usable furniture items that can be purchased with Vault Coins and placed in the base.
+
+Allow the player to select, place, move, or remove supported furniture items. Avoid letting objects overlap in obviously broken ways where practical.
+
+Display the furniture item's name, price, and ownership status.
+
+Ensure that purchased furniture actually appears in the base and remains there after leaving and returning.
+
+Save base layout and furniture ownership in persistent game storage appropriate to the current architecture.
+
+---
+
+## 5. MAKE CHARACTER CUSTOMIZATION SIGNIFICANTLY MORE ADVANCED
+
+The current character looks too basic. I want character customization to feel like an actual feature of a modern social game.
+
+Create a dedicated character customization screen with a large, clear preview of the avatar.
+
+The preview should support rotation so players can inspect the character from multiple angles when the current rendering system allows it.
+
+### Customization categories
+
+Implement the best practical selection of the following categories:
+
+**Body and appearance**
+- Available body presets.
+- Skin tones.
+- Hairstyle.
+- Hair color.
+- Face or facial presets, if supported.
+
+**Clothing**
+- Tops, hoodies, shirts, and jackets.
+- Trousers and shorts.
+- Sneakers and other footwear.
+- Hats and headwear.
+- Accessories such as glasses, chains, bags, or watches.
+
+**Style**
+- Streetwear.
+- Minimalist.
+- Sporty.
+- Luxury.
+- Casual.
+- Futuristic.
+
+**Colors and materials**
+- A controlled set of color choices.
+- Different clothing combinations.
+- Material variations where supported.
+
+**Identity**
+- Player nickname.
+- Profile appearance.
+- A display of the currently equipped outfit.
+
+### Quality requirements
+
+Do not create a menu filled with buttons that change only text labels.
+
+Where feasible, make equipment selections visibly update the actual avatar.
+
+If the existing project does not contain separate 3D clothing assets, implement the best practical solution using existing models, modular avatar parts, materials, or compatible assets already available in the project.
+
+Do not promise a fully realistic modular 3D avatar if the current engine or asset library cannot support it.
+
+Create a consistent stylized character design that fits the VAULTBOUND world.
+
+The UI should include:
+- Category navigation.
+- Item thumbnails or visual previews.
+- Owned and locked item states.
+- Clear equipped indicators.
+- A Save / Apply button.
+- A Cancel or Reset Appearance option.
+
+When the player purchases or equips an item, update the appropriate inventory and character data. Purchased cosmetics should not disappear when the player exits customization.
+
+Make the character screen visually impressive, organized, and easy to use.
+
+---
+
+## 6. REDESIGN THE ENTIRE USER INTERFACE
+
+The whole game needs a consistent visual identity.
+
+Currently, the design feels too basic and unfinished. Improve the quality of the world HUD, menus, inventory, marketplace, auctions, character editor, settings, and base interface together.
+
+### VAULTBOUND visual identity
+
+Use:
+- Midnight blue and charcoal as the primary colors.
+- Warm metallic gold for important highlights and premium elements.
+- Off-white text with readable contrast.
+- Restrained accent colors for status indicators.
+- Consistent icons and typography.
+- Subtle shadows, borders, transitions, and motion.
+- Carefully balanced spacing and alignment.
+
+The visual direction should feel like a mix of a premium urban social game, a sophisticated collectible economy, and a modern third-person game interface.
+
+Avoid:
+- Random gradients.
+- Excessive bright neon.
+- Generic default HTML buttons.
+- Repeated cards for everything.
+- Huge empty panels.
+- Overcrowded interfaces.
+- Unnecessary animations that interfere with play.
+- Tiny unreadable text.
+- Excessively rounded UI elements if they make everything look like a generic dashboard.
+
+### In-world HUD
+
+While the player is walking through the city, keep the interface unobtrusive.
+
+Show the most relevant information:
+- Player avatar or profile icon.
+- Player name.
+- Vault Coins balance.
+- Current location.
+- Optional minimap or location indicator.
+- Contextual interaction prompts.
+- Access to inventory and settings.
+
+Menus should not permanently cover the 3D environment.
+
+Use a pause menu or clean overlay system to access other features. When a menu opens, handle character movement appropriately so the player does not accidentally walk around behind the interface.
+
+### Responsive design
+
+The game should look good at common desktop resolutions and scale sensibly on smaller screens.
+
+Prioritize desktop keyboard-and-mouse gameplay, but make the interface adaptable to touch screens where practical.
+
+---
+
+## 7. REDESIGN VAULT COINS AND THE VIRTUAL ECONOMY
+
+The current currency system feels random and too basic.
+
+Keep the name **Vault Coins (VC)** unless there is a strong design reason to refine the visual presentation. Create a consistent currency system that connects marketplace purchases, auctions, rewards, mini-games, cosmetics, and base customization.
+
+### Currency design
+
+Create a polished Vault Coins icon and a consistent display in the HUD, inventory, shop, and auction house.
+
+Show the balance clearly without making it dominate the screen.
+
+Use consistent formatting for all prices.
+
+For example:
+- 250 VC.
+- 1,250 VC.
+- 12,500 VC.
+
+Use believable price tiers rather than assigning random prices to objects.
+
+### Economy rules
+
+Implement a coherent prototype economy:
+
+- Players begin with a reasonable starting balance.
+- Completing supported activities can reward coins.
+- Vault Duel can award or deduct virtual coins according to its game rules.
+- Buying an item deducts the correct amount.
+- Selling an item adds the correct amount.
+- Bidding reserves or deducts money according to a clearly defined auction rule.
+- Refunds and cancellations should update balances correctly.
+- Furniture purchases use the same currency.
+- Owned items cannot be purchased repeatedly unless duplicates are explicitly allowed.
+- Players cannot spend more coins than they own.
+- Failed transactions must not change the balance.
+- Display a clear success or error message after each transaction.
+
+Create an economy configuration so item prices, rewards, fees, and other balance values can be adjusted centrally.
+
+### Daily rewards and progression
+
+Where these features are already present or practical to implement, provide a consistent reward system with clearly defined rewards.
+
+Avoid overly generous rewards that make the marketplace meaningless.
+
+Any daily reward must follow a clear reset rule. Do not award unlimited daily bonuses simply because the user refreshes the page.
+
+Do not introduce real-money purchases or imply that Vault Coins have real-world monetary value.
+
+---
+
+## 8. IMPROVE THE MARKETPLACE AND AUCTION HOUSE
+
+The marketplace should feel like a real game trading interface and connect correctly to the rest of VAULTBOUND.
+
+### Marketplace
+
+Add clear item categories:
+- Clothing.
+- Accessories.
+- Collectibles.
+- Furniture.
+- Miscellaneous.
+
+Each item should have:
+- Name.
+- Image or visual thumbnail.
+- Description.
+- Price in Vault Coins.
+- Ownership or availability status.
+- Purchase button.
+- Optional rarity classification.
+
+Use a consistent rarity system only if it has meaningful benefits for progression or collecting.
+
+Ensure that every purchase updates the actual currency balance, inventory, and relevant appearance or base systems.
+
+### Player listings
+
+Preserve or improve the ability to list eligible owned items for sale.
+
+When listing an item:
+- Display the current item and its details.
+- Require an asking price.
+- Verify that the item is owned and eligible for sale.
+- Prevent duplicate listings of the same non-duplicable item.
+- Remove the item from available inventory or clearly mark it as listed.
+- Support cancellation according to clear rules.
+- Restore the item to inventory when the listing is cancelled.
+
+### Auction house
+
+Give the auction house a more premium interface.
+
+Each auction should show:
+- Item name and thumbnail.
+- Current bid.
+- Minimum next bid.
+- Auction status.
+- Remaining time if a real countdown is implemented.
+- Bid history in the appropriate mode.
+- Bid button.
+- A clear indication of whether the player is currently the highest bidder.
+
+Use consistent rules for bidding, refunds, and auction completion.
+
+Do not create fake timers or claim that an auction has ended while the actual state remains unchanged.
+
+For the offline prototype, auctions can use simulated demo listings, but make this mode explicit. Real, globally synchronized auctions require server-side state and validation.
+
+---
+
+## 9. IMPROVE THE INVENTORY AND CONNECT ALL GAME SYSTEMS
+
+The inventory should be a polished collection and equipment interface.
+
+Organize it into categories such as:
+- All items.
+- Clothing.
+- Accessories.
+- Collectibles.
+- Furniture.
+- Other usable items.
+
+Provide item thumbnails, names, rarity indicators when applicable, equipped status, and clear actions.
+
+Actions may include:
+- Equip.
+- Unequip.
+- Place in base.
+- List for sale.
+- Inspect item.
+- View description.
+
+Only display actions that are valid for that item's type.
+
+Keep the inventory synchronized with the character editor, marketplace, auction house, and base.
+
+Avoid duplicate ownership records and inconsistent currency values.
+
+---
+
+## 10. MAKE THE WORLD AND GAME MODES WORK TOGETHER
+
+The features should feel like parts of one game instead of unrelated demo screens.
+
+For example:
+
+1. The player launches VAULTBOUND.
+2. The player selects Solo, joins a lobby, or creates a lobby.
+3. The player enters the city.
+4. The player sees their personal base and the surrounding neighborhood.
+5. The player visits the marketplace and purchases clothing or furniture.
+6. The purchased clothing appears in character customization.
+7. The purchased furniture appears in the personal base.
+8. The player earns Vault Coins through supported activities.
+9. The player uses the auction house or lists eligible items.
+10. The player's inventory, currency, character, and base remain consistent after changing screens or returning later.
+
+Add loading states, empty states, success messages, error messages, and safe transitions.
+
+Do not create separate copies of the player's balance or inventory for different screens.
+
+Use a consistent source of truth for player data.
+
+---
+
+## 11. SAVE DATA AND KEEP THE PROTOTYPE RELIABLE
+
+Inspect the current save system before modifying it.
+
+Preserve existing player progress and provide safe migration defaults if the data structure changes.
+
+For offline or solo mode, use a suitable persistent local storage solution for:
+- Player nickname and appearance.
+- Keybindings and settings.
+- Vault Coins.
+- Inventory and equipment.
+- Purchased furniture.
+- Base layout.
+- Supported progress and rewards.
+
+Validate stored data when loading it and handle missing or malformed data gracefully.
+
+Do not reset the player's existing save without explicit permission.
+
+Do not place secrets, private credentials, or server-only logic in browser storage.
+
+For online features, keep authoritative currency balances, trades, auction results, and player ownership on the server. Do not trust the browser to determine the final result of a real multiplayer transaction.
+
+If online backend credentials or configuration are unavailable, clearly separate local prototype behavior from genuine online functionality.
+
+---
+
+## 12. IMPLEMENTATION AND QUALITY ASSURANCE
+
+Before making changes, inspect the current project structure, rendering engine, component system, state management, persistence layer, and existing game mechanics.
+
+Work with the current architecture wherever practical. Avoid rewriting the entire codebase simply to make cosmetic improvements.
+
+Implement the upgrade in a structured order:
+
+**Priority 1:**
+- Fix keyboard conflicts.
+- Implement configurable keybindings.
+- Ensure that menus and gameplay do not interfere with each other.
+
+**Priority 2:**
+- Build the main menu and mode-selection flow.
+- Add the solo, lobby, and multiplayer interface states.
+
+**Priority 3:**
+- Rework the world layout and create the residential district.
+- Make the player's base visibly identifiable and enterable.
+
+**Priority 4:**
+- Upgrade character customization and inventory integration.
+
+**Priority 5:**
+- Redesign the marketplace, auctions, currency display, and the overall UI.
+
+**Priority 6:**
+- Test persistence, navigation, transactions, interactions, and responsive layout.
+
+After implementation, verify the following:
+
+- A and D always move the player when the player is controlling the character.
+- Rebinding keys updates the actual controls.
+- Key conflicts are detected.
+- Settings persist after refreshing the game.
+- The home screen appears before entering the world.
+- The player can enter solo mode without pretending to join an online lobby.
+- The residential district contains 10–20 identifiable home plots or buildings.
+- The player's own base can be entered and customized.
+- Purchased furniture appears in the base.
+- Equipped clothing updates the avatar wherever supported.
+- Currency transactions correctly update the same balance everywhere.
+- Invalid purchases and bids do not alter the save.
+- Menus, buildings, and mini-games can be entered and exited without breaking movement.
+- No major buttons are decorative or nonfunctional.
+- No duplicate keyboard listeners or console errors are introduced.
+- Existing working game mechanics remain available.
+
+### Final instruction
+
+Prioritize a genuinely better playable experience over superficial redesigns.
+
+I want VAULTBOUND to feel like an actual compact 3D social game: a world I can explore, a home that belongs to me, a character I can personalize, an economy that makes sense, and a polished main menu that lets me choose how to play.
+
+Implement the most complete working version possible using the existing project and available assets. If a feature requires infrastructure that is not currently configured, build the usable interface and integration points, but do not falsely present a local simulation as a functioning online multiplayer service.
+
+Do not finish by giving me only a list of suggestions. Apply the changes to the project, run the available checks, fix the issues you find, and summarize what was actually implemented versus what still requires external backend configuration.

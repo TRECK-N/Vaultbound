@@ -1,0 +1,6 @@
+{
+  "name": "VAULTBOUND — 3D Social World & Strategic Duel Arena",
+  "description": "Build your fortune. Trust your instincts. Own the city. 3D social world with personal bases, grand auction house, marketplace trading, and strategic Vault Duels.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,1077 @@
+# VAULTBOUND — COMPLETE GAME DESIGN AND DEVELOPMENT MASTER PROMPT
+
+## Project overview
+
+Build **VAULTBOUND**, an original, persistent, 3D multiplayer browser game centered around a shared social world, personal bases, virtual wealth, collectibles, player-driven trading, auctions, heists, and competitive multiplayer games.
+
+The game should combine the social experience of meeting friends in a shared 3D world with the excitement of collecting rare items, building wealth, making smart trades, competing in skill-based matches, and protecting valuable possessions.
+
+The main experience must feel like a real online game, not a website dashboard disguised as a game.
+
+Players should be able to open the website, create an account, customize a 3D avatar, enter a world with up to 10 players, visit their own base, explore the city, meet friends, buy and sell items, participate in auctions, play competitive matches, and gradually build a valuable collection.
+
+The long-term goal is to create a world where different players develop different strengths: some become wealthy traders, others become skilled competitors, others collect rare items, and others specialize in risky heists.
+
+**Core principle: every major activity should connect to the same persistent world and economy.**
+
+Do not copy the exact gameplay, branding, art, or assets of existing games. Create an original identity, world, ruleset, and progression system.
+
+---
+
+# 1. PLATFORM AND TECHNICAL DIRECTION
+
+## Primary platform
+
+Build a desktop-first browser game that runs directly through a website URL.
+
+Players should not need to download a separate game client.
+
+Prioritize:
+- Windows and macOS desktop browsers.
+- Keyboard and mouse controls.
+- Smooth 3D rendering.
+- Stable multiplayer sessions.
+- Responsive menus.
+- Short loading times.
+
+Make the interface adaptable to tablets and mobile browsers where practical, but do not sacrifice the desktop experience to force every mechanic onto a small screen.
+
+Design the architecture so mobile touch controls can be added later.
+
+## Recommended technology
+
+Use the existing supported Lovable stack and inspect the project before selecting dependencies.
+
+Preferred options:
+- React and TypeScript for the application.
+- React Three Fiber and Three.js for the 3D environment.
+- GLTF/GLB assets for modular characters and environment objects.
+- Supabase Auth for authentication.
+- PostgreSQL for persistent player data.
+- Supabase Realtime or a suitable multiplayer networking service for presence and room communication.
+- Trusted server-side functions or a dedicated authoritative game server for critical game and economy operations.
+
+Do not assume that database realtime subscriptions alone are sufficient for a polished, synchronized 3D multiplayer world.
+
+Use a dedicated realtime networking solution if necessary for reliable movement synchronization, room state, and simultaneous match actions.
+
+Do not expose privileged backend credentials in the browser.
+
+---
+
+# 2. BRAND IDENTITY AND VISUAL STYLE
+
+## Game name
+
+Working title: **VAULTBOUND**
+
+Tagline: **Build your fortune. Trust your instincts. Own the city.**
+
+Use a distinctive wordmark with a subtle vault-inspired geometric symbol.
+
+The overall visual identity should communicate:
+- Wealth.
+- Mystery.
+- Competition.
+- Exclusivity.
+- Freedom.
+- Social interaction.
+- Risk and reward.
+
+The city should look premium and futuristic without becoming a generic cyberpunk environment.
+
+## Color palette
+
+Use a restrained palette:
+- Deep charcoal and midnight navy for menus and interface surfaces.
+- Warm metallic gold for wealth, rewards, and prestigious items.
+- Electric blue for interactive elements.
+- Violet for selected rare and mysterious items.
+- White and cool grey for readable text.
+- Distinct rarity colors for collectible items.
+
+Gold should feel valuable, not cover every surface.
+
+Use lighting, material contrast, depth, and animation to create visual quality rather than excessive glow effects.
+
+## Art direction
+
+Create a polished, stylized 3D world with semi-realistic materials and slightly exaggerated character proportions.
+
+The game should be visually coherent from the character models to the city architecture, collectibles, interface, and animations.
+
+Avoid:
+- Generic placeholder dashboards.
+- Unstyled default buttons.
+- Excessive gradients.
+- Unnecessary glassmorphism.
+- Primitive cube characters.
+- Randomly mixed art styles.
+- Excessively large menus covering the world.
+- Fake screenshots presented as playable content.
+
+Use procedural geometry and locally available assets when original models are not available. Keep assets modular and replaceable.
+
+---
+
+# 3. THE 3D CHARACTER SYSTEM
+
+The avatar is central to the identity of the game.
+
+## Character proportions and appearance
+
+Create stylized, high-quality humanoid characters with:
+- A recognizable head and face.
+- Natural body proportions with slightly stylized features.
+- Properly fitted clothing.
+- Visible hands and shoes.
+- Animated walking and running.
+- Smooth turning.
+- Idle animations.
+- Optional emotes.
+
+Characters should feel like customizable young-adult streetwear avatars in a modern social game, rather than realistic photographs of people or simple cartoon blocks.
+
+Support multiple body presets and a range of skin tones, hairstyles, facial presets, and clothing styles.
+
+Do not make paid or rare cosmetics change the character's competitive hitbox or gameplay abilities.
+
+## Character creation screen
+
+On first login, show a full-screen 3D character editor.
+
+The character should stand in the center of a rotating preview area with attractive studio lighting.
+
+The player can rotate the model, zoom in, and inspect the front and back.
+
+Provide these customization categories:
+
+**Face and body**
+- Body preset.
+- Skin tone.
+- Face preset.
+- Eye appearance.
+- Hair style.
+- Hair color.
+- Optional facial hair where supported.
+
+**Clothing**
+- T-shirts.
+- Hoodies.
+- Jackets.
+- Trousers.
+- Shorts.
+- Sneakers.
+- Boots.
+- Gloves.
+
+**Accessories**
+- Hats.
+- Masks.
+- Glasses.
+- Chains.
+- Earrings.
+- Backpacks.
+- Watches.
+- Cosmetic shoulder accessories.
+
+**Style**
+- Clothing colors where supported.
+- Material variants.
+- Character emotes.
+- Idle animations.
+- Walking styles.
+- Victory poses.
+
+Save the character appearance to the player's account.
+
+When a player returns, restore the exact appearance they previously selected.
+
+## Cosmetic rarity
+
+Implement:
+- Common.
+- Uncommon.
+- Rare.
+- Epic.
+- Legendary.
+- Mythic.
+
+Rarity should affect the visual treatment, exclusivity, and collecting appeal of an item. It should not automatically increase competitive power.
+
+Examples:
+- Legendary animated jacket.
+- Rare silver chain.
+- Mythic seasonal mask.
+- Limited edition sneakers.
+- Exclusive victory animation.
+
+Create a cosmetic shop and a dedicated wardrobe interface.
+
+Every purchase must verify the player's balance and ownership on the backend.
+
+---
+
+# 4. WORLD DESIGN: VAULTBOUND CITY
+
+Create a compact but detailed 3D city designed around social interaction and useful destinations.
+
+Do not build an enormous empty open world. The first map should be small enough that players can walk between important locations quickly.
+
+The city should feel alive, with other player characters, animated environmental details, attractive lighting, signage, ambient audio, and interactive buildings.
+
+## Main map layout
+
+Organize the city around a central plaza with clear paths connecting the major destinations.
+
+### Zone A — Central Plaza
+
+This is the primary spawn area.
+
+Include:
+- A central fountain or sculptural landmark.
+- Benches and decorative planters.
+- Pedestrian paths.
+- A visible city sign.
+- A few decorative vehicles or futuristic transport props.
+- A map board showing important destinations.
+- Space where players can meet and use emotes.
+
+Display player names above their avatars at a reasonable distance.
+
+### Zone B — Grand Auction House
+
+Create a large, luxurious building with a distinctive entrance, gold detailing, display screens, and a premium interior.
+
+Inside, include:
+- A featured auction display.
+- Live auction listings.
+- A rare-item exhibition area.
+- A bidding interface.
+- A personal bidding history.
+- A countdown display for ending auctions.
+
+Interacting with the auction counter opens the auction interface.
+
+### Zone C — Player Marketplace
+
+Create a more accessible, bustling trading district.
+
+Include:
+- Market stalls or display counters.
+- A marketplace entrance.
+- Seller listings.
+- Item display pedestals.
+- A search and browse interface.
+
+Players can list eligible items, purchase other players' items, and review completed transactions.
+
+### Zone D — Game Hall
+
+Create an arena-like building for competitive games.
+
+Include:
+- A main entrance.
+- A large match display.
+- Casual and ranked match options.
+- Private room creation.
+- Join-by-code functionality.
+- A waiting area.
+- Visible player avatars where practical.
+
+### Zone E — Residential District
+
+This area contains the entrances to player-owned bases.
+
+Each base is a separate persistent space, but the entrances should feel integrated into the same city.
+
+Display only public information about the owner, such as their chosen display name, avatar, and optional collection highlights.
+
+### Zone F — Personal Vault and Bank
+
+Create a secure-looking location for viewing currency, protected collectibles, and transaction history.
+
+This is primarily a user interface accessed through an in-world interaction.
+
+Never expose private account data to nearby players.
+
+### Zone G — Event Square
+
+Create a central seasonal event location.
+
+It should support:
+- Weekly markets.
+- Limited-time exhibitions.
+- Special collectibles.
+- Event announcements.
+- Tournament displays.
+- Seasonal decorations.
+
+Make the environment visually change when an event is active.
+
+### Navigation and movement
+
+Use third-person controls:
+- W, A, S, D: movement.
+- Mouse: camera control.
+- Shift: run.
+- Space: jump where appropriate.
+- E: interact.
+- Escape: pause or open the game menu.
+
+Provide an on-screen interaction prompt when the player approaches an interactive object.
+
+Support clickable interactions as an alternative.
+
+Use a third-person follow camera with smooth movement, collision-aware positioning, and sensitivity settings.
+
+Prevent the camera from clipping excessively through walls or objects.
+
+The map should have a minimap or compact navigation panel showing important locations.
+
+---
+
+# 5. MULTIPLAYER WORLDS AND PRIVATE ROOMS
+
+Support public world instances containing up to 10 simultaneous players.
+
+Each world instance has its own active player list and synchronized character positions.
+
+Players must be able to:
+- Join a public world.
+- Create a private world.
+- Invite friends.
+- Join through a room code.
+- Leave the current world.
+- See other players.
+- See player names and avatars.
+- Use emotes.
+- Send match invitations.
+- Request trades.
+
+## Room creation
+
+Provide a room creation interface with:
+- Public or private visibility.
+- A maximum capacity of 10.
+- A unique backend-generated room code.
+- A copy-code button.
+- A participant list.
+- A host indicator.
+- A leave-room button.
+
+Joining by code must verify that the room exists, is active, and has capacity.
+
+Private rooms must not become accessible merely because someone guesses a URL.
+
+Handle disconnects, reconnections, and full rooms gracefully.
+
+## Synchronization
+
+Synchronize player position, rotation, avatar appearance, emotes, and presence through an appropriate multiplayer service.
+
+Use interpolation for smoother movement.
+
+Do not permanently write every movement update to the database.
+
+Implement room authorization, connection cleanup, and server-side validation for important interactions.
+
+Clearly distinguish real connected players from practice bots.
+
+---
+
+# 6. PERSONAL BASES
+
+Every new account receives a personal base.
+
+The initial base should be a compact modern penthouse or luxury loft, with an upgrade path toward a larger private collection space.
+
+## Base layout
+
+Include:
+- An entrance area.
+- A main living area.
+- A display wall.
+- A collectible display shelf.
+- A personal vault.
+- A furniture placement area.
+- A security terminal.
+- A profile or trophy display.
+
+Use warm interior lighting, modern furniture, metallic details, and attractive materials.
+
+## Furniture and placement
+
+Players can purchase furniture and place it in predefined or grid-assisted positions.
+
+Support:
+- Sofas.
+- Tables.
+- Chairs.
+- Shelves.
+- Artworks.
+- Sculptures.
+- Lighting.
+- Rugs.
+- Decorative plants.
+- Collectible pedestals.
+- Trophy cases.
+
+Provide a simple placement mode with rotation, move, confirm, and cancel controls.
+
+Save the base layout persistently.
+
+Players must not be able to place objects they do not own.
+
+## Base progression
+
+Use Vault Coins to unlock:
+- Additional rooms.
+- More display space.
+- Furniture collections.
+- Lighting themes.
+- Decorative walls and floors.
+- Better vault capacity.
+- Security cosmetics.
+- Additional trophy displays.
+
+The base should become a visible reflection of the player's progress.
+
+## Visiting friends
+
+Allow public visits, friends-only visits, and private bases.
+
+Visitors can inspect displayed collectibles and view public statistics.
+
+They cannot access private storage, withdraw currency, or move another player's objects.
+
+---
+
+# 7. INVENTORY AND COLLECTIBLE ITEMS
+
+Create a persistent inventory system with an attractive grid and detailed item previews.
+
+Every item must have:
+- A unique item ID.
+- A display name.
+- A category.
+- A rarity.
+- A description.
+- An icon or 3D model.
+- An ownership record.
+- A tradable status.
+- A protection status.
+- An acquisition source.
+- A market estimate where appropriate.
+
+## Item categories
+
+Include:
+- Artifacts.
+- Rare sculptures.
+- Collectible statues.
+- Artwork.
+- Treasure objects.
+- Mystery crates.
+- Furniture.
+- Character cosmetics.
+- Seasonal collectibles.
+- Trophies.
+- Utility items.
+- Special limited editions.
+
+Some collectibles may have unique serial numbers or a defined supply limit.
+
+For example, a seasonal statue might have 100 legitimate copies in the entire game.
+
+The backend must enforce that limit.
+
+Do not allow the frontend to create duplicate copies of unique items.
+
+## Item information
+
+Opening an item should show:
+- Its description.
+- Its rarity.
+- Whether it can be traded.
+- Whether it can be listed.
+- Its estimated value.
+- Relevant recent completed sales.
+- Its acquisition method.
+- Its protection status.
+
+Clearly label estimated values as estimates.
+
+Use completed sales as a stronger signal than active asking prices when calculating market estimates.
+
+---
+
+# 8. ECONOMY AND CURRENCY
+
+## Vault Coins
+
+Vault Coins are the main currency.
+
+Players earn them through:
+- Introductory missions.
+- Competitive match rewards.
+- Heists.
+- Daily and weekly challenges.
+- Event participation.
+- Legitimate item sales.
+- Achievements.
+
+Players spend them on:
+- Cosmetics.
+- Furniture.
+- Base upgrades.
+- Marketplace purchases.
+- Auction bids.
+- Optional match entry fees.
+- Eligible gameplay tools.
+
+## Event Tokens
+
+Event Tokens are a secondary, event-specific currency.
+
+Earn them through special events, seasonal challenges, and selected achievements.
+
+Use them for event cosmetics and special collectible rewards.
+
+Do not require real-money purchases to participate in core gameplay.
+
+## Economic safeguards
+
+Use a secure backend ledger.
+
+All balance changes must be recorded with a transaction ID, amount, reason, timestamp, and relevant reference.
+
+Prevent:
+- Negative balances.
+- Duplicate rewards.
+- Double spending.
+- Unauthorized transfers.
+- Client-side balance editing.
+- Concurrent purchases of the same unique item.
+
+Use transaction-safe operations for all currency and item transfers.
+
+Introduce reasonable currency sinks such as cosmetic purchases, base upgrades, and listing fees.
+
+Do not allow wealth to automatically determine competitive skill.
+
+---
+
+# 9. THE GRAND AUCTION HOUSE
+
+Build a fully functional auction system connected to the player economy.
+
+Players can browse, bid, and create eligible listings.
+
+## Auction formats
+
+### Standard auctions
+
+A seller chooses:
+- An eligible item.
+- Starting price.
+- Optional reserve price.
+- Auction duration.
+- Description.
+
+Other players submit valid bids.
+
+The backend determines the winner and final price.
+
+### Mystery auctions
+
+Create mystery crates with partially hidden contents.
+
+Players should know the relevant category, rarity range, and available probability information before bidding.
+
+Some crates can be valuable, but not every crate should produce a profit.
+
+Clearly explain what is known and unknown before the purchase.
+
+### Limited events
+
+Create scheduled events such as:
+- Sunday Treasure Auction.
+- Midnight Relics.
+- Collector's Weekend.
+- Seasonal Vault Sale.
+
+Use backend-managed event times.
+
+## Auction screen
+
+Include:
+- Featured auctions.
+- Ending soon.
+- Newly listed items.
+- Rare items.
+- My bids.
+- My listings.
+- Completed auctions.
+- Search and filters.
+- Current bid.
+- Remaining time.
+- Bid history.
+- Item preview.
+- Confirmation before bidding.
+
+Use realtime updates where supported.
+
+Prevent self-bidding where prohibited, invalid bids, duplicate settlement, and manipulation of auction timing.
+
+Reserve or escrow bid amounts safely and release them when appropriate.
+
+If a valid bid arrives at the end, use a clearly defined anti-sniping extension rule.
+
+---
+
+# 10. PLAYER MARKETPLACE AND TRADING
+
+Create a separate fixed-price marketplace.
+
+Players can:
+- Browse listings.
+- Search by item.
+- Filter by rarity and category.
+- Sort by price.
+- View completed-sale history.
+- Buy items instantly.
+- List eligible items.
+- Cancel eligible listings.
+- Review purchase and sales history.
+
+Listings should not duplicate ownership. When an item is listed, reserve it or transfer it to a secure listing state until the sale or cancellation is resolved.
+
+## Direct player trading
+
+Allow two friends to open a trade session.
+
+Both players can offer eligible items and Vault Coins.
+
+Show both offers clearly.
+
+Require both players to confirm the exact same offer version.
+
+If either player changes an offer, invalidate the previous confirmations.
+
+Finalize the trade atomically on the backend.
+
+Include:
+- Trade cancellation.
+- Timeouts.
+- Ownership checks.
+- Balance validation.
+- Transaction history.
+- Blocking and reporting tools.
+
+Prevent item duplication and scams.
+
+---
+
+# 11. SIGNATURE GAME: VAULT DUEL
+
+Create an original, highly replayable tactical multiplayer game called **VAULT DUEL**.
+
+The concept is a fast, simultaneous-action bluffing game involving prediction, resource management, hidden intentions, defense, and risk.
+
+It should be easy to understand but reward experienced players.
+
+Do not reproduce the exact rules or visual identity of UNO, Blackjack, poker, or other existing games.
+
+## Proposed core rules
+
+Each player enters a match with a small set of action cards and a limited number of tactical resources.
+
+Each round, players secretly select an action and then reveal it simultaneously.
+
+Available actions include:
+
+- **Scout:** obtain information about a possible opponent strategy.
+- **Guard:** defend against certain attacks.
+- **Bluff:** conceal or misrepresent your intended action.
+- **Swipe:** attempt to capture an exposed round reward.
+- **Invest:** commit resources to increase a potential reward.
+- **Counter:** exploit a predictable opponent action.
+- **Secure:** bank a portion of your accumulated rewards.
+- **Disrupt:** interfere with an opponent's plan under specific conditions.
+
+Treat these as starting ideas and develop a coherent ruleset with explicit interactions, counterplay, and balanced probabilities.
+
+Every action must have a purpose and a weakness.
+
+The player should see the rules before the first match.
+
+After every round, show a clear explanation of the outcome.
+
+## Match formats
+
+Support:
+- 1v1.
+- 1v1v1.
+- 1v1v1v1.
+- 2v2.
+
+Implement 1v1 first and extend the same rules engine to other formats.
+
+Use appropriate balancing changes for team and free-for-all matches.
+
+A full match should normally last a few minutes.
+
+## Rewards and stakes
+
+Casual matches should use low-risk rewards or practice resources.
+
+Ranked matches should use a server-defined reward system.
+
+Private matches may support mutually agreed virtual stakes in a later stage.
+
+For item-based stakes, use secure escrow, eligibility checks, explicit consent, and server-validated settlement.
+
+Do not enable item wagers until the escrow and match-resolution systems have been tested.
+
+Do not implement real-money betting, cash withdrawals, or pay-to-win competitive advantages.
+
+## Ranking
+
+Implement:
+- A matchmaking rating.
+- Visible competitive tiers.
+- Win/loss records.
+- Match history.
+- Personal statistics.
+- Seasonal leaderboards.
+- Competitive milestones.
+
+Keep competitive rating separate from account wealth and cosmetic rarity.
+
+---
+
+# 12. HEISTS AND BASE RAIDS
+
+Create a separate heist mode that rewards skill, planning, and risk management.
+
+A player selects a heist, chooses eligible equipment, and enters a compact level.
+
+Include interactive mechanics such as:
+- Avoiding security cameras.
+- Finding safe routes.
+- Solving simple puzzles.
+- Picking locks.
+- Managing a timer.
+- Escaping with loot.
+
+Successful players receive eligible loot.
+
+Failed attempts may consume a limited-use tool or a clearly disclosed entry resource, but should not destroy an entire collection arbitrarily.
+
+## Base raids
+
+Allow raids only under explicit eligibility and protection rules.
+
+Only designated raid-eligible items may be lost.
+
+Protected items and secure storage must remain inaccessible to attackers.
+
+Implement raid cooldowns, logs, clear risk warnings, and security upgrades.
+
+Never expose private inventories or account credentials through the raid system.
+
+---
+
+# 13. EVENTS AND SUNDAY TREASURE MARKET
+
+Create an event calendar connected to the city environment.
+
+Examples:
+- Sunday Treasure Market.
+- Limited Collectible Auctions.
+- Double Reward Weekend.
+- Artifact Hunt.
+- Heist Challenge.
+- Vault Duel Tournament.
+- Seasonal Collection.
+
+Each event has:
+- A name.
+- Description.
+- Start and end times.
+- Eligibility requirements.
+- Rewards.
+- Rules.
+- Progress.
+- Results.
+
+Use backend timestamps and show local time to the player.
+
+Make the city and Event Square visually reflect active events.
+
+Build the event system so new events can be configured without rebuilding the entire application.
+
+---
+
+# 14. BATTLE PASS AND PROGRESSION
+
+Implement account levels, XP, achievements, daily challenges, weekly challenges, and a seasonal Battle Pass.
+
+Example missions:
+- Win three Vault Duel matches.
+- Complete a heist.
+- Sell an eligible item.
+- Visit a friend's base.
+- Participate in a scheduled event.
+- Win a match in a particular format.
+
+Rewards can include:
+- Character cosmetics.
+- Furniture.
+- Emotes.
+- Nameplates.
+- Trophy displays.
+- Event Tokens.
+- Collectible cosmetics.
+
+Implement a free progression track first.
+
+An optional premium cosmetic track may be added later, but must not make competitive players inherently stronger.
+
+Prevent automated, endlessly repeatable actions from generating unlimited XP.
+
+---
+
+# 15. SOCIAL SYSTEM AND PLAYER PROFILES
+
+Implement:
+- Friend requests.
+- Friends list.
+- Online status.
+- Private invitations.
+- Trade requests.
+- Match invitations.
+- Public profiles.
+- Recent achievements.
+- Match statistics.
+- Collection highlights.
+- Base visit permissions.
+- Player blocking and reporting.
+
+Add leaderboards for:
+- Vault Duel rating.
+- Seasonal performance.
+- Trading activity.
+- Collection value.
+- Heist achievements.
+
+Use separate leaderboards for skill and wealth.
+
+Do not treat a player's collection estimate as guaranteed cash value.
+
+---
+
+# 16. AUTHENTICATION AND FIRST SESSION
+
+Use a secure authentication provider.
+
+The first-session tutorial should guide the player through:
+
+1. Creating an account.
+2. Choosing a display name.
+3. Customizing the avatar.
+4. Entering the city.
+5. Learning movement and interaction.
+6. Receiving starter Vault Coins.
+7. Visiting the marketplace.
+8. Playing a beginner Vault Duel.
+9. Claiming a first reward.
+10. Visiting the personal base.
+
+Persist the player's appearance, currency, inventory, base, progress, and preferences.
+
+Provide logout, session handling, and account recovery where supported.
+
+---
+
+# 17. DATABASE AND SECURITY
+
+Use structured, relational data models.
+
+Include entities for:
+- Profiles.
+- Character appearances.
+- Item definitions.
+- Item ownership.
+- Inventories.
+- Currency balances and ledger.
+- Bases and layouts.
+- Friends.
+- World instances and memberships.
+- Auctions and bids.
+- Marketplace listings.
+- Trade sessions and offers.
+- Match rooms and participants.
+- Match actions and results.
+- Ratings.
+- Heists.
+- Events.
+- Battle Pass progress.
+- Missions.
+- Notifications.
+- Audit records.
+
+Use appropriate foreign keys, indexes, constraints, and access policies.
+
+Apply Row Level Security or equivalent authorization to private data.
+
+Use trusted backend functions for all valuable state changes.
+
+Never trust client-submitted balances, prices, item IDs, rewards, or match results without server-side validation.
+
+Use idempotency protections and safe transaction handling.
+
+---
+
+# 18. INTERFACE AND SCREEN DESIGN
+
+Create a polished game HUD with:
+- A compact currency display.
+- A profile/avatar button.
+- An inventory shortcut.
+- A minimap.
+- Context-sensitive interaction prompts.
+- A friend and notification indicator.
+- A settings menu.
+
+Required screens:
+1. Login and registration.
+2. Character creation.
+3. Main 3D world.
+4. Base interior.
+5. Inventory.
+6. Character wardrobe.
+7. Cosmetic shop.
+8. Auction House.
+9. Marketplace.
+10. Direct trade.
+11. Game Hall.
+12. Vault Duel lobby.
+13. Active Vault Duel.
+14. Match results.
+15. Heist selection and gameplay.
+16. Friends.
+17. Private room management.
+18. Events.
+19. Battle Pass.
+20. Profile.
+21. Leaderboards.
+22. Settings.
+
+All menus must have functional navigation, clear loading states, error messages, empty states, and confirmation dialogs.
+
+Do not add decorative buttons that do nothing.
+
+---
+
+# 19. IMPLEMENTATION ORDER
+
+This is a large game. Build it in stages and keep each stage functional.
+
+## Phase 1 — Core playable world
+
+Build:
+- Authentication.
+- Persistent profile.
+- Character creation.
+- Third-person 3D movement.
+- The compact city map.
+- Interactive buildings.
+- Personal base.
+- Inventory.
+- Vault Coins.
+- Basic cosmetic purchases.
+
+## Phase 2 — Multiplayer
+
+Build:
+- Up to 10 real players per world.
+- Shared character positions.
+- Presence.
+- Private rooms and codes.
+- Friend invitations.
+- Reconnection handling.
+
+## Phase 3 — Economy
+
+Build:
+- Secure currency ledger.
+- Collectible ownership.
+- Fixed-price marketplace.
+- Auctions.
+- Direct trades.
+- Transaction history.
+
+## Phase 4 — Competitive game
+
+Build:
+- Complete Vault Duel rules.
+- 1v1 matchmaking.
+- Practice bots.
+- Private matches.
+- Server-validated results.
+- Ratings and history.
+
+Then extend to 1v1v1, 1v1v1v1, and 2v2.
+
+## Phase 5 — Expansion
+
+Build:
+- Heists.
+- Eligible base raids.
+- Base security.
+- Events.
+- Battle Pass.
+- Additional collectibles.
+- Leaderboards.
+
+Keep later-stage features clearly marked as unavailable until they work.
+
+---
+
+# 20. ACCEPTANCE TESTS
+
+Test with at least two independent accounts.
+
+Verify that:
+- Both players can enter the same world.
+- They see one another moving in real time.
+- Private room codes work.
+- Player appearance persists after relogging.
+- Base layouts persist.
+- Purchases update the inventory and balance correctly.
+- Marketplace sales transfer ownership exactly once.
+- Auctions award the correct item to the correct winner.
+- Trades cannot duplicate items or currency.
+- Vault Duel results are validated and saved.
+- Disconnects do not duplicate rewards.
+- Full rooms reject additional players.
+- Players cannot alter their currency through browser tools.
+- Players cannot access private inventories.
+- Simultaneous purchase attempts cannot both acquire a unique item.
+- Invalid actions produce clear errors rather than inconsistent data.
+
+Do not claim that a feature is complete merely because its screen exists.
+
+If a feature requires an external service or configuration, explain exactly what is missing.
+
+---
+
+# FINAL OBJECTIVE
+
+Deliver VAULTBOUND as a persistent, social 3D browser game where friends can meet in a shared city, customize their characters, visit bases, collect rare objects, trade and bid in a living marketplace, compete in an original strategic game, take calculated risks, and build long-term wealth.
+
+The first priority is not to create the largest possible world. It is to create a small, beautiful, functional world that people genuinely want to return to.
+
+**Build a playable game first, then expand it into a complete multiplayer economy and social world.**
